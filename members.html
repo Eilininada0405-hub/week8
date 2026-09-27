@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="架空のプロダクトチームで働く5人のメンバーを紹介します。"
+    />
+    <title>チームメンバー | COMMON GROUND</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "DM Sans", "Noto Sans JP", sans-serif;
+        background: #f4f5f0;
+        color: #18231f;
+      }
+
+      body {
+        min-width: 320px;
+        background-image: radial-gradient(#d8ded5 0.7px, transparent 0.7px);
+        background-size: 18px 18px;
+      }
+
+      .filter-button[aria-pressed="true"] {
+        background: #1e493b;
+        color: white;
+      }
+
+      .filter-button:focus-visible {
+        outline: 3px solid #f3a65a;
+        outline-offset: 3px;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen antialiased">
+    <header class="border-b border-[#dce2da] bg-[#fbfcf8]/90">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5 sm:px-8">
+        <a class="text-sm font-bold tracking-[0.14em] text-[#1e493b]" href="#top">COMMON GROUND</a>
+        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[#78847d]">Our people · 2026</span>
+      </div>
+    </header>
+
+    <main id="top" class="mx-auto max-w-6xl px-5 pb-20 pt-12 sm:px-8 sm:pt-16">
+      <section aria-labelledby="page-title" class="mb-10 max-w-2xl">
+        <p class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[#be643e]">Small team, shared purpose</p>
+        <h1 id="page-title" class="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">チームメンバー</h1>
+        <p class="mt-4 max-w-xl text-sm leading-7 text-[#5e6b64] sm:text-base">
+          それぞれの得意分野を持ち寄って、毎日の「使いやすい」をつくる5人です。
+        </p>
+      </section>
+
+      <section aria-label="メンバーの役割で絞り込み" class="mb-7 flex flex-wrap items-center gap-2">
+        <span class="mr-1 text-xs font-semibold text-[#78847d]">ROLE</span>
+        <button class="filter-button rounded-full border border-[#cdd6ce] bg-white px-4 py-2 text-sm font-semibold text-[#42534a] transition-colors" type="button" data-role="all" aria-pressed="true">全員</button>
+        <button class="filter-button rounded-full border border-[#cdd6ce] bg-white px-4 py-2 text-sm font-semibold text-[#42534a] transition-colors" type="button" data-role="エンジニア" aria-pressed="false">エンジニア</button>
+        <button class="filter-button rounded-full border border-[#cdd6ce] bg-white px-4 py-2 text-sm font-semibold text-[#42534a] transition-colors" type="button" data-role="デザイナー" aria-pressed="false">デザイナー</button>
+      </section>
+
+      <section aria-label="チームメンバー一覧">
+        <p id="member-count" class="mb-4 text-sm text-[#78847d]" aria-live="polite"></p>
+        <div id="member-list" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="border-t border-[#dce2da] bg-[#fbfcf8]/90">
+      <p class="mx-auto max-w-6xl px-5 py-6 text-xs text-[#78847d] sm:px-8">COMMON GROUND · A fictional product team</p>
+    </footer>
+
+    <script>
+      const members = [
+        {
+          name: "佐藤 みのり",
+          role: "デザイナー",
+          comment: "迷わず使える画面を目指して、細かな使い心地まで考えています。",
+          initials: "MS",
+          color: "#e9b786",
+        },
+        {
+          name: "高橋 蓮",
+          role: "エンジニア",
+          comment: "アイデアを、長く安心して使えるプロダクトに育てるのが好きです。",
+          initials: "RT",
+          color: "#b4ccbd",
+        },
+        {
+          name: "伊藤 あかり",
+          role: "エンジニア",
+          comment: "データの向こうにいる人を想像しながら、機能をつくっています。",
+          initials: "AI",
+          color: "#e5b8b4",
+        },
+        {
+          name: "渡辺 悠",
+          role: "デザイナー",
+          comment: "チームの声を集めて、伝わりやすい形にするのが得意です。",
+          initials: "YW",
+          color: "#c6c1df",
+        },
+        {
+          name: "小林 颯太",
+          role: "エンジニア",
+          comment: "小さく試して確かめながら、使う人に届く改善を積み重ねます。",
+          initials: "SK",
+          color: "#e3ce91",
+        },
+      ];
+
+      const memberList = document.querySelector("#member-list");
+      const memberCount = document.querySelector("#member-count");
+      const filterButtons = document.querySelectorAll(".filter-button");
+
+      function renderMembers(memberData) {
+        memberList.replaceChildren();
+        memberCount.textContent = `${memberData.length} members`;
+
+        memberData.forEach((member) => {
+          const card = document.createElement("article");
+          card.className = "rounded-lg border border-[#e1e6df] bg-white p-5 shadow-sm sm:p-6";
+
+          const header = document.createElement("div");
+          header.className = "mb-5 flex items-center gap-4";
+
+          const avatar = document.createElement("div");
+          avatar.className = "flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-sm font-bold text-[#26372f]";
+          avatar.style.backgroundColor = member.color;
+          avatar.setAttribute("aria-hidden", "true");
+          avatar.textContent = member.initials;
+
+          const identity = document.createElement("div");
+          const name = document.createElement("h2");
+          name.className = "text-lg font-semibold text-[#18231f]";
+          name.textContent = member.name;
+
+          const role = document.createElement("p");
+          role.className = "mt-1 text-sm font-medium text-[#be643e]";
+          role.textContent = member.role;
+
+          const comment = document.createElement("p");
+          comment.className = "border-t border-[#edf0eb] pt-4 text-sm leading-7 text-[#5e6b64]";
+          comment.textContent = member.comment;
+
+          identity.append(name, role);
+          header.append(avatar, identity);
+          card.append(header, comment);
+          memberList.appendChild(card);
+        });
+      }
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const selectedRole = button.dataset.role;
+          const filteredMembers =
+            selectedRole === "all"
+              ? members
+              : members.filter((member) => member.role === selectedRole);
+
+          if (selectedRole !== "all") {
+            console.log(`${selectedRole} filter result:`, filteredMembers);
+          }
+
+          filterButtons.forEach((filterButton) => {
+            filterButton.setAttribute(
+              "aria-pressed",
+              String(filterButton === button),
+            );
+          });
+
+          renderMembers(filteredMembers);
+        });
+      });
+
+      renderMembers(members);
+    </script>
+  </body>
+</html>
